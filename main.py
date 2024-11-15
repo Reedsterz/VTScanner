@@ -10,7 +10,7 @@ import pandas as pd
 try:
     from key import API_KEY
 except:
-    API_KEY = "<Insert API key>"
+    API_KEY = "<Insert Api key>"
 
 HEADERS = {"x-apikey": API_KEY}
 
@@ -39,19 +39,20 @@ def error_handle(response):
         raise Exception(response.status_code)
     else:
         return True
-    return False
     
 def parse_response(response):
     
     if response:
         last_analysis_stats = response.json().get("data", {}).get("attributes", {}).get("last_analysis_stats", {}) or ""
         threat_severity_level = response.json().get("data", {}).get("attributes", {}).get("threat_severity", {}).get("threat_severity_level", {}) or ""
+        popular_threat_name = response.json().get("data", {}).get("attributes", {}).get("popular_threat_classification", {}).get("popular_threat_name", {}) or ""
         popular_threat_category = response.json().get("data", {}).get("attributes", {}).get("threat_severity", {}).get("threat_severity_data", {}).get("popular_threat_category", {}) or ""
         names = response.json().get("data", {}).get("attributes", {}).get("names", {}) or ""
         
         return json.dumps({
             "last_analysis_stats": last_analysis_stats,
             "threat_severity_level": threat_severity_level,
+            "popular_threat_name": popular_threat_name,
             "popular_threat_category": popular_threat_category,
             "names": names
         }, indent = 4)
